@@ -27,14 +27,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RegisterActivity extends AppCompatActivity
-{
+public class RegisterActivity extends AppCompatActivity{
     TextView LinkToLogin;
     EditText Email,Password,ConfirmPassword,FirstName,LastName;
     Button RegisterButton;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         FirstName=(EditText) findViewById(R.id.etFirstName);
@@ -78,8 +76,7 @@ public class RegisterActivity extends AppCompatActivity
         final String LastNameToSend=LastName.getText().toString();
         ProgressDialog progressDialog;
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute(){
             super.onPreExecute();
             progressDialog=new ProgressDialog(RegisterActivity.this);
             progressDialog.setMessage("Please Wait");
@@ -87,24 +84,19 @@ public class RegisterActivity extends AppCompatActivity
         }
 
         @Override
-        protected String doInBackground(String... params)
-        {
-            try
-            {
+        protected String doInBackground(String... params){
+            try{
                 return PostData(params[0]);
             }
-            catch (IOException ex)
-            {
-                return "Network Error!!";
+            catch (IOException ex){
+                return "Network Error!";
             }
-            catch (JSONException ex)
-            {
+            catch (JSONException ex){
                 return "Data Invalid !";
             }
         }
         @Override
-        protected void onPostExecute(String result)
-        {
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             if(progressDialog!=null)
                 progressDialog.dismiss();
@@ -119,14 +111,12 @@ public class RegisterActivity extends AppCompatActivity
                 startActivity(BackToRegisterIntent);
             }
         }
-        private String PostData(String urlPath) throws IOException,JSONException
-        {
+        private String PostData(String urlPath) throws IOException,JSONException{
             StringBuilder result=new StringBuilder();
             BufferedReader bufferedReader=null;
             BufferedWriter bufferedWriter=null;
             StringBuilder builder;
-            try
-            {
+            try{
                 JSONObject dataToSend=new JSONObject();
                 dataToSend.put("Email",EmailToSend);
                 dataToSend.put("Password",PasswordToSend);
@@ -157,8 +147,7 @@ public class RegisterActivity extends AppCompatActivity
                 builder=new StringBuilder();
                 builder.append(urlConnection.getResponseCode());
             }
-            finally
-            {
+            finally{
                 if(bufferedReader!=null)
                     bufferedReader.close();
                 if(bufferedWriter!=null)
