@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity{
                 final String email=Email.getText().toString();
                 final String StringPassword=Password.getText().toString();
                 final String EncryptedPassword=Encryption(StringPassword);
-                new GetDataClass().execute("http://192.168.43.165:5000/login?email="+email+"&password="+StringPassword);
+                new GetDataClass().execute("http://192.168.43.165:5000/login?email="+email+"&password="+EncryptedPassword);
             }
         });
     }
@@ -80,10 +80,10 @@ public class LoginActivity extends AppCompatActivity{
             if(progressDialog!=null)
                 progressDialog.dismiss();
             if(result.contains("true")) {
-                Toast.makeText(LoginActivity.this,"Login Successfull!!",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,"Login Successful!!",Toast.LENGTH_LONG).show();
             }
             else{
-                Toast.makeText(LoginActivity.this,"Login UnSuccessfull!!",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,"Login UnSuccessful!!",Toast.LENGTH_LONG).show();
             }
         }
         private String GetData(String urlpath) throws IOException{
@@ -114,9 +114,6 @@ public class LoginActivity extends AppCompatActivity{
             return result.toString();
         }
     }
-
-
-
     public String Encryption(String md5){
         try{
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");

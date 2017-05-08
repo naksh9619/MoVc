@@ -55,12 +55,10 @@ public class RegisterActivity extends AppCompatActivity{
             @Override
             public void onClick(View view)
             {
-                if((Password.getText().toString().equals(ConfirmPassword.getText().toString())))
-                {
+                if((Password.getText().toString().equals(ConfirmPassword.getText().toString()))){
                     new PostDataClass().execute("http://192.168.43.165:5000/register");
                 }
-                else
-                {
+                else{
                     Toast.makeText(getApplicationContext(),"Passwords Do Not Match!!",Toast.LENGTH_LONG).show();
                     Intent BackToRegisterIntent=new Intent(RegisterActivity.this,RegisterActivity.class);
                     startActivity(BackToRegisterIntent);
@@ -68,12 +66,27 @@ public class RegisterActivity extends AppCompatActivity{
             }
         });
     }
+    public String Encryption(String md5){
+        try{
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i){
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        }
+        catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
+    }
     class PostDataClass extends AsyncTask<String,Void,String>
     {
         final String EmailToSend=Email.getText().toString();
         final String PasswordToSend=Password.getText().toString();
         final String FirstNameToSend=FirstName.getText().toString();
         final String LastNameToSend=LastName.getText().toString();
+        final String EncryptedPasswordToSend=Encryption(PasswordToSend);
         ProgressDialog progressDialog;
         @Override
         protected void onPreExecute(){
@@ -88,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity{
             try{
                 return PostData(params[0]);
             }
-            catch (IOException ex){
+            catch(IOException ex){
                 return "Network Error!";
             }
             catch (JSONException ex){
@@ -119,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity{
             try{
                 JSONObject dataToSend=new JSONObject();
                 dataToSend.put("Email",EmailToSend);
-                dataToSend.put("Password",PasswordToSend);
+                dataToSend.put("Password",EncryptedPasswordToSend);
                 dataToSend.put("FirstName",FirstNameToSend);
                 dataToSend.put("LastName",LastNameToSend);
                 //building connection to the server
